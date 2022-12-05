@@ -17,11 +17,13 @@ public class ProductController {
         this.repository = repository;
     }
 
+    // get all products
     @GetMapping("/products")
     public List<Product> all() {
         return repository.findAll();
     }
 
+    // get product by id
     @GetMapping("/products/{id}")
     public Product getById(@PathVariable Long id) {
         return repository.findById(id)

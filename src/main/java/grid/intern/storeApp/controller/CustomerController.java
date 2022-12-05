@@ -4,6 +4,8 @@ import grid.intern.storeApp.exceptions.customerExceptions.CustomerExistsExceptio
 import grid.intern.storeApp.exceptions.customerExceptions.CustomerNotFoundException;
 import grid.intern.storeApp.model.Customer;
 import grid.intern.storeApp.repository.CustomerRepository;
+import grid.intern.storeApp.repository.ProductRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -12,67 +14,69 @@ import java.util.List;
 
 @RestController
 public class CustomerController {
-    private final CustomerRepository repository;
+    private final CustomerRepository customerRepository;
+    private final ProductRepository productRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public CustomerController(CustomerRepository repository) {
-        this.repository = repository;
+    public CustomerController(CustomerRepository customerRepository, ProductRepository productRepository) {
+        this.customerRepository = customerRepository;
+        this.productRepository = productRepository;
         passwordEncoder = new BCryptPasswordEncoder();
     }
 
     // getting all users
     @GetMapping("/customers")
     public List<Customer> all() {
-        return repository.findAll();
+        return customerRepository.findAll();
     }
 
     // geting user by id
     @GetMapping("/customers/{id}")
     public Customer one(@PathVariable Long id) {
-        return repository.findById(id)
+        return customerRepository.findById(id)
                 .orElseThrow(() -> new CustomerNotFoundException(id));
     }
 
-    // registering user
+    // registering new user
     @PostMapping("/customers/signup")
     public Customer signUp(@RequestBody Customer customer) {
-        if (repository.existsCustomerByEmail(customer.getEmail())) {
+        if (customerRepository.existsCustomerByEmail(customer.getEmail())) {
             throw new CustomerExistsException(customer.getEmail());
         }
         String hashedPassword = passwordEncoder.encode(customer.getPassword());
         customer.setPassword(hashedPassword);
 
-        return repository.save(customer);
+        return customerRepository.save(customer);
     }
 
-    // login user
+    // login existing user
     @PostMapping("/customers/login")
-    public String login(@RequestBody Customer customer) {
-        if (!repository.existsCustomerByEmail(customer.getEmail())) {
+    public String login(@RequestBody Customer customer, HttpSession session) {
+        if (!customerRepository.existsCustomerByEmail(customer.getEmail())) {
             throw new CustomerNotFoundException(customer.getEmail());
         }
-        Customer dbCustomer = repository.getCustomerByEmail(customer.getEmail());
+        Customer dbCustomer = customerRepository.getCustomerByEmail(customer.getEmail());
 
         if (passwordEncoder.matches(customer.getPassword(), dbCustomer.getPassword()) &&
         customer.getEmail().equals(dbCustomer.getEmail())) {
-            return "success";
+            return session.getId();
         }
 
-        return "fail";
+        return "failed to login";
     }
 
-    // editing user
+    // editing existing user
     @PutMapping("/customers/{id}")
     public Customer replaceCustomer(@PathVariable Long id, @RequestBody Customer newCustomer) {
-        return repository.findById(id)
+        return customerRepository.findById(id)
                 .map(customer -> {
                         customer.setEmail(newCustomer.getEmail());
                         customer.setPassword(passwordEncoder.encode(newCustomer.getPassword()));
-                        return repository.save(customer);
+                        return customerRepository.save(customer);
                 })
                 .orElseGet(() -> {
                         newCustomer.setId(id);
-                        return repository.save(newCustomer);
+                        return customerRepository.save(newCustomer);
                 });
     }
 }
