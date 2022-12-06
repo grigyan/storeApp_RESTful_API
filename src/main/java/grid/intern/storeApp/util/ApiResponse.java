@@ -1,4 +1,4 @@
-package grid.intern.storeApp.controller;
+package grid.intern.storeApp.util;
 
 import java.time.LocalDateTime;
 

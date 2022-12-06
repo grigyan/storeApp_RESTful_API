@@ -10,25 +10,25 @@ import java.util.Objects;
 @Table(name = "product")
 public class Product {
     @Id
-    private Long id;
+    private Integer id;
     private String title;
     private Integer available;
     private Double price;
 
     public Product() {}
 
-    public Product(Long id, String title, Integer available, Double price) {
+    public Product(Integer id, String title, Integer available, Double price) {
         this.id = id;
         this.title = title;
         this.available = available;
         this.price = price;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

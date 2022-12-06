@@ -26,8 +26,8 @@ public class LoadDatabase {
     @Bean
     CommandLineRunner initProducts(ProductRepository repository) {
         return args -> {
-            log.info("Preloading " + repository.save(new Product(2364L, "Nail gun", 8, 23.76)));
-            log.info("Preloading " + repository.save(new Product(8900L, "Charger", 2, 108.33)));
+            log.info("Preloading " + repository.save(new Product(2364, "Nail gun", 8, 23.76)));
+            log.info("Preloading " + repository.save(new Product(8900, "Charger", 2, 108.33)));
         };
     }
 }

@@ -19,7 +19,7 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public Product findById(Long id) {
+    public Product findById(Integer id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
     }
