@@ -1,4 +1,4 @@
-package grid.intern.storeApp.model;
+package grid.intern.storeApp.model.entity;
 
 import jakarta.persistence.*;
 

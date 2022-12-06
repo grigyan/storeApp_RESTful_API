@@ -1,7 +1,7 @@
 package grid.intern.storeApp.service;
 
 import grid.intern.storeApp.exceptions.customerExceptions.CustomerNotFoundException;
-import grid.intern.storeApp.model.Customer;
+import grid.intern.storeApp.model.entity.Customer;
 import grid.intern.storeApp.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 

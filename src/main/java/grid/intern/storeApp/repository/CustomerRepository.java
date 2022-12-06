@@ -1,6 +1,6 @@
 package grid.intern.storeApp.repository;
 
-import grid.intern.storeApp.model.Customer;
+import grid.intern.storeApp.model.entity.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

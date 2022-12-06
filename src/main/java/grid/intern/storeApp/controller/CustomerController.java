@@ -2,8 +2,7 @@ package grid.intern.storeApp.controller;
 
 import grid.intern.storeApp.exceptions.customerExceptions.CustomerExistsException;
 import grid.intern.storeApp.exceptions.customerExceptions.CustomerNotFoundException;
-import grid.intern.storeApp.model.Customer;
-import grid.intern.storeApp.repository.CustomerRepository;
+import grid.intern.storeApp.model.entity.Customer;
 import grid.intern.storeApp.repository.ProductRepository;
 import grid.intern.storeApp.service.CustomerService;
 import jakarta.servlet.http.HttpSession;

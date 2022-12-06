@@ -1,7 +1,6 @@
-package grid.intern.storeApp.model;
+package grid.intern.storeApp.model.entity;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
 import java.util.Objects;

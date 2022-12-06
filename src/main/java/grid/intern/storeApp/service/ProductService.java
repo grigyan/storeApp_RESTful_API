@@ -1,7 +1,7 @@
 package grid.intern.storeApp.service;
 
 import grid.intern.storeApp.exceptions.productExceptions.ProductNotFoundException;
-import grid.intern.storeApp.model.Product;
+import grid.intern.storeApp.model.entity.Product;
 import grid.intern.storeApp.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 

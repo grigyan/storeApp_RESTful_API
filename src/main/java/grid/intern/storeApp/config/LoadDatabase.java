@@ -1,7 +1,7 @@
 package grid.intern.storeApp.config;
 
-import grid.intern.storeApp.model.Customer;
-import grid.intern.storeApp.model.Product;
+import grid.intern.storeApp.model.entity.Customer;
+import grid.intern.storeApp.model.entity.Product;
 import grid.intern.storeApp.repository.CustomerRepository;
 import grid.intern.storeApp.repository.ProductRepository;
 import org.slf4j.Logger;
