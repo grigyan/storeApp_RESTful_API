@@ -3,30 +3,31 @@ package grid.intern.storeApp.controller;
 import grid.intern.storeApp.exceptions.productExceptions.ProductNotFoundException;
 import grid.intern.storeApp.model.Product;
 import grid.intern.storeApp.repository.ProductRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import grid.intern.storeApp.service.ProductService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/products")
 public class ProductController {
-    private final ProductRepository repository;
+    private final ProductService productService;
 
-    public ProductController(ProductRepository repository) {
-        this.repository = repository;
+    public ProductController(ProductService service) {
+        this.productService = service;
     }
 
     // get all products
-    @GetMapping("/products")
-    public List<Product> all() {
-        return repository.findAll();
+    @GetMapping("/")
+    public ResponseEntity<List<Product>> all() {
+        return new ResponseEntity<>(productService.findAll(), HttpStatus.OK);
     }
 
     // get product by id
-    @GetMapping("/products/{id}")
-    public Product getById(@PathVariable Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+    @GetMapping("/{id}")
+    public ResponseEntity<Product> getById(@PathVariable Long id) {
+        return new ResponseEntity<>(productService.findById(id), HttpStatus.OK);
     }
 }
