@@ -6,11 +6,14 @@ import grid.intern.storeApp.model.Customer;
 import grid.intern.storeApp.repository.CustomerRepository;
 import grid.intern.storeApp.repository.ProductRepository;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class CustomerController {
@@ -26,11 +29,16 @@ public class CustomerController {
 
     // getting all users
     @GetMapping("/customers")
-    public List<Customer> all() {
+    public List<Customer> all(HttpSession session) {
+        if (session == null) {
+            System.out.println("session is null");
+        }
+
+        System.out.println(session.getId());
         return customerRepository.findAll();
     }
 
-    // geting user by id
+    // getting user by id
     @GetMapping("/customers/{id}")
     public Customer one(@PathVariable Long id) {
         return customerRepository.findById(id)
@@ -50,8 +58,9 @@ public class CustomerController {
     }
 
     // login existing user
-    @PostMapping("/customers/login")
-    public String login(@RequestBody Customer customer, HttpSession session) {
+    @PostMapping(value = "/customers/login",  produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String, String> login(@RequestBody Customer customer, HttpSession session) {
         if (!customerRepository.existsCustomerByEmail(customer.getEmail())) {
             throw new CustomerNotFoundException(customer.getEmail());
         }
@@ -59,10 +68,10 @@ public class CustomerController {
 
         if (passwordEncoder.matches(customer.getPassword(), dbCustomer.getPassword()) &&
         customer.getEmail().equals(dbCustomer.getEmail())) {
-            return session.getId();
+            return Collections.singletonMap("sessionId", session.getId());
         }
 
-        return "failed to login";
+        return Collections.singletonMap("info", "wrong username or password");
     }
 
     // editing existing user
