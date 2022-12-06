@@ -5,10 +5,11 @@ import jakarta.persistence.*;
 import java.util.Objects;
 
 @Entity
+@Table(name = "customer")
 public class Customer {
     @Id
     @GeneratedValue
-    private Long id;
+    private Integer id;
     @Column(unique = true)
     private String email;
     private String password;
@@ -20,11 +21,11 @@ public class Customer {
         this.password = password;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
