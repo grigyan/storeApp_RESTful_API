@@ -5,8 +5,11 @@ import grid.intern.storeApp.exceptions.customerExceptions.CustomerNotFoundExcept
 import grid.intern.storeApp.model.Customer;
 import grid.intern.storeApp.repository.CustomerRepository;
 import grid.intern.storeApp.repository.ProductRepository;
+import grid.intern.storeApp.service.CustomerService;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -16,76 +19,56 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/customers")
 public class CustomerController {
-    private final CustomerRepository customerRepository;
+    private final CustomerService customerService;
     private final ProductRepository productRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public CustomerController(CustomerRepository customerRepository, ProductRepository productRepository) {
-        this.customerRepository = customerRepository;
+    public CustomerController(CustomerService service, ProductRepository productRepository) {
         this.productRepository = productRepository;
+        this.customerService = service;
         passwordEncoder = new BCryptPasswordEncoder();
     }
 
-    // getting all users
-    @GetMapping("/customers")
-    public List<Customer> all(HttpSession session) {
-        if (session == null) {
-            System.out.println("session is null");
-        }
-
-        System.out.println(session.getId());
-        return customerRepository.findAll();
+    @GetMapping("/")
+    public ResponseEntity<List<Customer>> getCustomers() {
+        return new ResponseEntity<>(customerService.findAll(), HttpStatus.OK);
     }
 
     // getting user by id
-    @GetMapping("/customers/{id}")
-    public Customer one(@PathVariable Long id) {
-        return customerRepository.findById(id)
-                .orElseThrow(() -> new CustomerNotFoundException(id));
+    @GetMapping("/{id}")
+    public ResponseEntity<Customer> getCustomerById(@PathVariable Long id) {
+        return new ResponseEntity<>(customerService.findById(id), HttpStatus.OK);
     }
 
     // registering new user
-    @PostMapping("/customers/signup")
-    public Customer signUp(@RequestBody Customer customer) {
-        if (customerRepository.existsCustomerByEmail(customer.getEmail())) {
+    @PostMapping("/signup")
+    public ResponseEntity<Customer> signUp(@RequestBody Customer customer) {
+        if (customerService.existsCustomerByEmail(customer.getEmail())) {
             throw new CustomerExistsException(customer.getEmail());
         }
         String hashedPassword = passwordEncoder.encode(customer.getPassword());
         customer.setPassword(hashedPassword);
 
-        return customerRepository.save(customer);
+        return new ResponseEntity<>(customerService.save(customer), HttpStatus.OK);
     }
 
     // login existing user
-    @PostMapping(value = "/customers/login",  produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public Map<String, String> login(@RequestBody Customer customer, HttpSession session) {
-        if (!customerRepository.existsCustomerByEmail(customer.getEmail())) {
+    @PostMapping(value = "/login",  produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, String>> login(@RequestBody Customer customer, HttpSession session) {
+        if (!customerService.existsCustomerByEmail(customer.getEmail())) {
             throw new CustomerNotFoundException(customer.getEmail());
         }
-        Customer dbCustomer = customerRepository.getCustomerByEmail(customer.getEmail());
 
-        if (passwordEncoder.matches(customer.getPassword(), dbCustomer.getPassword()) &&
-        customer.getEmail().equals(dbCustomer.getEmail())) {
-            return Collections.singletonMap("sessionId", session.getId());
+        Customer customerFromDb = customerService.getCustomerByEmail(customer.getEmail());
+        if (passwordEncoder.matches(customer.getPassword(), customerFromDb.getPassword()) &&
+        customer.getEmail().equals(customerFromDb.getEmail())) {
+            return new ResponseEntity<>(Collections.singletonMap("sessionId", session.getId()),
+                    HttpStatus.OK);
         }
 
-        return Collections.singletonMap("info", "wrong username or password");
-    }
-
-    // editing existing user
-    @PutMapping("/customers/{id}")
-    public Customer replaceCustomer(@PathVariable Long id, @RequestBody Customer newCustomer) {
-        return customerRepository.findById(id)
-                .map(customer -> {
-                        customer.setEmail(newCustomer.getEmail());
-                        customer.setPassword(passwordEncoder.encode(newCustomer.getPassword()));
-                        return customerRepository.save(customer);
-                })
-                .orElseGet(() -> {
-                        newCustomer.setId(id);
-                        return customerRepository.save(newCustomer);
-                });
+        return new ResponseEntity<>(Collections.singletonMap("info", "wrong username or password"),
+                HttpStatus.UNAUTHORIZED);
     }
 }
