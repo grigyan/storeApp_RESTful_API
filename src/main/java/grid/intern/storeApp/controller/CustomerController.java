@@ -2,6 +2,7 @@ package grid.intern.storeApp.controller;
 
 import grid.intern.storeApp.exceptions.customerExceptions.CustomerExistsException;
 import grid.intern.storeApp.exceptions.customerExceptions.CustomerNotFoundException;
+import grid.intern.storeApp.model.dto.CustomerSessionDto;
 import grid.intern.storeApp.model.entity.Customer;
 import grid.intern.storeApp.repository.ProductRepository;
 import grid.intern.storeApp.service.CustomerService;
@@ -37,7 +38,7 @@ public class CustomerController {
 
     // getting user by id
     @GetMapping("/{id}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable Long id) {
+    public ResponseEntity<Customer> getCustomerById(@PathVariable Integer id) {
         return new ResponseEntity<>(customerService.findById(id), HttpStatus.OK);
     }
 
@@ -63,6 +64,8 @@ public class CustomerController {
         Customer customerFromDb = customerService.getCustomerByEmail(customer.getEmail());
         if (passwordEncoder.matches(customer.getPassword(), customerFromDb.getPassword()) &&
         customer.getEmail().equals(customerFromDb.getEmail())) {
+            CustomerSessionDto customerSessionDto = new CustomerSessionDto(customerFromDb.getId());
+            session.setAttribute("user", customerSessionDto);
             return new ResponseEntity<>(Collections.singletonMap("sessionId", session.getId()),
                     HttpStatus.OK);
         }

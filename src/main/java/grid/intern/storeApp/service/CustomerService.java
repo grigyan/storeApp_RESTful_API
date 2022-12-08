@@ -19,7 +19,7 @@ public class CustomerService {
         return customerRepository.findAll();
     }
 
-    public Customer findById(Long id) {
+    public Customer findById(Integer id) {
         return customerRepository.findById(id)
                 .orElseThrow(() -> new CustomerNotFoundException(id));
     }

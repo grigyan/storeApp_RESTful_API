@@ -1,7 +1,7 @@
 package grid.intern.storeApp.exceptions.customerExceptions;
 
 public class CustomerNotFoundException extends RuntimeException {
-    public CustomerNotFoundException(Long id) {
+    public CustomerNotFoundException(Integer id) {
         super("Could not find customer with id: " + id);
     }
 

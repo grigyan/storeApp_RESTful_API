@@ -30,6 +30,9 @@ public class CartService {
         cart.setQuantity(addToCartDto.getQuantity());
 
         cartRepository.save(cart);
+
+        // add case when the product is not found
+        // add case when the quantity is wrong
     }
 
 

@@ -2,6 +2,7 @@ package grid.intern.storeApp.model.entity;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
