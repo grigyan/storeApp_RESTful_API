@@ -2,6 +2,8 @@ package grid.intern.storeApp.service;
 
 import grid.intern.storeApp.exceptions.productExceptions.ProductNotFoundException;
 import grid.intern.storeApp.model.dto.AddToCartDto;
+import grid.intern.storeApp.model.dto.CartDto;
+import grid.intern.storeApp.model.dto.CartItemDto;
 import grid.intern.storeApp.model.entity.Cart;
 import grid.intern.storeApp.model.entity.Customer;
 import grid.intern.storeApp.model.entity.Product;
@@ -9,6 +11,9 @@ import grid.intern.storeApp.repository.CartRepository;
 import grid.intern.storeApp.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -33,6 +38,24 @@ public class CartService {
 
         // add case when the product is not found
         // add case when the quantity is wrong
+    }
+
+    public CartDto listAllItems(Customer customer) {
+        List<Cart> cartList = cartRepository.findAllByCustomerId(customer.getId());
+
+        List<CartItemDto> cartItems = new ArrayList<>();
+        double total = 0;
+
+        for (Cart cart : cartList) {
+            CartItemDto cartItemDto = new CartItemDto(cart);
+            total += cartItemDto.getQuantity() * cartItemDto.getProduct().getPrice();
+            cartItems.add(cartItemDto);
+        }
+
+        CartDto cartDto = new CartDto();
+        cartDto.setCartItemList(cartItems);
+        cartDto.setTotalCost(total);
+        return cartDto;
     }
 
 
