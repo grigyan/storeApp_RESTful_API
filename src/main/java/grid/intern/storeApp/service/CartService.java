@@ -1,5 +1,7 @@
 package grid.intern.storeApp.service;
 
+import grid.intern.storeApp.exceptions.cartExceptions.ItemDoesNotBelongToUserException;
+import grid.intern.storeApp.exceptions.cartExceptions.ItemNotFoundException;
 import grid.intern.storeApp.exceptions.productExceptions.ProductNotFoundException;
 import grid.intern.storeApp.model.dto.AddToCartDto;
 import grid.intern.storeApp.model.dto.CartDto;
@@ -56,6 +58,17 @@ public class CartService {
         cartDto.setCartItemList(cartItems);
         cartDto.setTotalCost(total);
         return cartDto;
+    }
+
+    public void deleteCartItem(Integer itemId, Customer customer) {
+        Cart cart = cartRepository.findById(itemId)
+                .orElseThrow(() -> new ItemNotFoundException(itemId));
+
+        if (cart.getCustomer().equals(customer.getId())) {
+            throw new ItemDoesNotBelongToUserException(itemId, customer.getId());
+        }
+
+        cartRepository.delete(cart);
     }
 
 

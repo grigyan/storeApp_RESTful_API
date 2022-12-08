@@ -58,6 +58,7 @@ public class Customer {
                 '}';
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -66,15 +67,13 @@ public class Customer {
         Customer customer = (Customer) o;
 
         if (!Objects.equals(id, customer.id)) return false;
-        if (!Objects.equals(email, customer.email)) return false;
-        return Objects.equals(password, customer.password);
+        return Objects.equals(email, customer.email);
     }
 
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (password != null ? password.hashCode() : 0);
         return result;
     }
 }

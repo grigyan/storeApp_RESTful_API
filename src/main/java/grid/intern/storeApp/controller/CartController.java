@@ -37,11 +37,12 @@ public class CartController {
 
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addToCart(@RequestBody AddToCartDto addToCartDto, HttpSession httpSession) {
-        CustomerSessionDto customerSessionDto = (CustomerSessionDto) httpSession.getAttribute("user");
-        Customer customer = customerService.findById(customerSessionDto.getSessionId());
-        if (customer == null) {
+        if (httpSession.getAttribute("user") == null) {
             throw new CustomerNotLoggedInException();
         }
+
+        CustomerSessionDto customerSessionDto = (CustomerSessionDto) httpSession.getAttribute("user");
+        Customer customer = customerService.findById(customerSessionDto.getSessionId());
         int available = productService.findById(addToCartDto.getProductId()).getAvailable();
         int toBeAdded = addToCartDto.getQuantity();
         if (toBeAdded > available) {
@@ -49,16 +50,32 @@ public class CartController {
         }
 
         cartService.addToCart(addToCartDto, customer);
-
         return new ResponseEntity<>(new ApiResponse(true, "Added to Cart"), HttpStatus.CREATED);
     }
 
     @GetMapping("/")
     public ResponseEntity<CartDto> getCartItems(HttpSession httpSession) {
+        if (httpSession.getAttribute("user") == null) {
+            throw new CustomerNotLoggedInException();
+        }
+
         CustomerSessionDto customerSessionDto = (CustomerSessionDto) httpSession.getAttribute("user");
         Customer customer = customerService.findById(customerSessionDto.getSessionId());
         CartDto cartDto = cartService.listAllItems(customer);
         return new ResponseEntity<>(cartDto, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/{cartItemId}")
+    public ResponseEntity<ApiResponse> deleteCartItem(@PathVariable Integer cartItemId, HttpSession httpSession) {
+        if (httpSession.getAttribute("user") == null) {
+            throw new CustomerNotLoggedInException();
+        }
+
+        CustomerSessionDto customerSessionDto = (CustomerSessionDto) httpSession.getAttribute("user");
+        Customer customer = customerService.findById(customerSessionDto.getSessionId());
+        cartService.deleteCartItem(cartItemId, customer);
+
+        return new ResponseEntity<>(new ApiResponse(true, "Item has been removed"), HttpStatus.OK);
     }
 
 }
