@@ -8,7 +8,6 @@ import grid.intern.storeApp.repository.ProductRepository;
 import grid.intern.storeApp.service.CustomerService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -55,22 +54,14 @@ public class CustomerController {
     }
 
     // login existing user
-    @PostMapping(value = "/login",  produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody Customer customer, HttpSession session) {
-        if (!customerService.existsCustomerByEmail(customer.getEmail())) {
-            throw new CustomerNotFoundException(customer.getEmail());
-        }
-
-        Customer customerFromDb = customerService.getCustomerByEmail(customer.getEmail());
-        if (passwordEncoder.matches(customer.getPassword(), customerFromDb.getPassword()) &&
-        customer.getEmail().equals(customerFromDb.getEmail())) {
-            CustomerSessionDto customerSessionDto = new CustomerSessionDto(customerFromDb.getId());
-            session.setAttribute("user", customerSessionDto);
+        if (customerService.successfulLogIn(customer, session)) {
             return new ResponseEntity<>(Collections.singletonMap("sessionId", session.getId()),
                     HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(Collections.singletonMap("info", "wrong username or password"),
+                    HttpStatus.UNAUTHORIZED);
         }
-
-        return new ResponseEntity<>(Collections.singletonMap("info", "wrong username or password"),
-                HttpStatus.UNAUTHORIZED);
     }
 }
