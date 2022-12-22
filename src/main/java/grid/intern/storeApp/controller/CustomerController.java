@@ -6,7 +6,9 @@ import grid.intern.storeApp.model.dto.CustomerSessionDto;
 import grid.intern.storeApp.model.entity.Customer;
 import grid.intern.storeApp.repository.ProductRepository;
 import grid.intern.storeApp.service.CustomerService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,11 +23,9 @@ import java.util.Map;
 @RequestMapping("/customers")
 public class CustomerController {
     private final CustomerService customerService;
-    private final ProductRepository productRepository;
     private final PasswordEncoder passwordEncoder;
 
     public CustomerController(CustomerService service, ProductRepository productRepository) {
-        this.productRepository = productRepository;
         this.customerService = service;
         passwordEncoder = new BCryptPasswordEncoder();
     }
@@ -55,9 +55,9 @@ public class CustomerController {
 
     // login existing user
     @PostMapping(value = "/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody Customer customer, HttpSession session) {
-        if (customerService.successfulLogIn(customer, session)) {
-            return new ResponseEntity<>(Collections.singletonMap("sessionId", session.getId()),
+    public ResponseEntity<Map<String, String>> login(@RequestBody Customer customer, HttpServletRequest request) {
+        if (customerService.successfulLogIn(customer, request.getSession(true))) {
+            return new ResponseEntity<>(Collections.singletonMap("sessionId", request.getSession(false).getId()),
                     HttpStatus.OK);
         } else {
             return new ResponseEntity<>(Collections.singletonMap("info", "wrong username or password"),

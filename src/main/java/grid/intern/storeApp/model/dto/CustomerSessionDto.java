@@ -9,11 +9,11 @@ public class CustomerSessionDto implements Serializable {
         this.customerId = customerId;
     }
 
-    public Integer getSessionId() {
+    public Integer getCustomerId() {
         return customerId;
     }
 
-    public void setSessionId(Integer customerId) {
+    public void setCustomerId(Integer customerId) {
         this.customerId = customerId;
     }
 }

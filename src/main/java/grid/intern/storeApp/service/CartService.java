@@ -2,6 +2,7 @@ package grid.intern.storeApp.service;
 
 import grid.intern.storeApp.exceptions.cartExceptions.ItemDoesNotBelongToUserException;
 import grid.intern.storeApp.exceptions.cartExceptions.ItemNotFoundException;
+import grid.intern.storeApp.exceptions.cartExceptions.LowInStockException;
 import grid.intern.storeApp.exceptions.productExceptions.ProductNotFoundException;
 import grid.intern.storeApp.model.dto.AddToCartDto;
 import grid.intern.storeApp.model.dto.CartDto;
@@ -16,9 +17,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
-@Transactional
 public class CartService {
     private final CartRepository cartRepository;
     private final ProductService productService;
@@ -30,6 +31,13 @@ public class CartService {
 
     public void addToCart(AddToCartDto addToCartDto, Customer customer) {
         Product product = productService.findById(addToCartDto.getProductId());
+        if (product == null) {
+            throw new ItemNotFoundException(addToCartDto.getProductId());
+        }
+
+        if (addToCartDto.getQuantity() > product.getAvailable()) {
+            throw new LowInStockException(product.getAvailable());
+        }
 
         Cart cart = new Cart();
         cart.setProduct(product);
@@ -38,8 +46,10 @@ public class CartService {
 
         cartRepository.save(cart);
 
-        // add case when the product is not found
-        // add case when the quantity is wrong
+    }
+
+    public List<Cart> findAllByCustomerId(Integer customerId) {
+        return cartRepository.findAllByCustomerId(customerId);
     }
 
     public CartDto listAllItems(Customer customer) {
@@ -64,14 +74,17 @@ public class CartService {
         Cart cart = cartRepository.findById(itemId)
                 .orElseThrow(() -> new ItemNotFoundException(itemId));
 
-        if (cart.getCustomer().equals(customer.getId())) {
+        if (!cart.getCustomer().getId().equals(customer.getId())) {
             throw new ItemDoesNotBelongToUserException(itemId, customer.getId());
         }
 
         cartRepository.delete(cart);
     }
 
-
-
+    public void modifyCart(Customer customer, Integer productId, Integer newQuantity) {
+        Cart cartItem = cartRepository.findAllByCustomerIdAndProductId(customer.getId(), productId);
+        cartItem.setQuantity(newQuantity);
+        cartRepository.save(cartItem);
+    }
 
 }

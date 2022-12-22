@@ -12,6 +12,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.session.web.http.CookieHttpSessionIdResolver;
+import org.springframework.session.web.http.DefaultCookieSerializer;
+import org.springframework.session.web.http.HttpSessionIdResolver;
 
 @EnableWebSecurity
 @Configuration
@@ -20,13 +23,27 @@ public class AppSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf().disable()
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
-            .authorizeHttpRequests().requestMatchers("/customers/login", "/customers/signup").permitAll()
-            .anyRequest().authenticated()
-            .and()
-            .httpBasic();
-
+                .csrf().disable()
+                .headers().frameOptions().disable();
+//                .and()
+//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .authorizeHttpRequests()
+//                .requestMatchers("/customers/login",
+//                        "/customers/signup", "/customers/", "/products/").permitAll()
+//                .anyRequest().permitAll()
+//                .and()
+//                .httpBasic();
+//
         return http.build();
+    }
+
+
+    @Bean
+    public HttpSessionIdResolver httpSessionIdResolver() {
+        CookieHttpSessionIdResolver resolver = new CookieHttpSessionIdResolver();
+        DefaultCookieSerializer cookieSerializer = new DefaultCookieSerializer();
+        cookieSerializer.setUseBase64Encoding(false);
+        resolver.setCookieSerializer(cookieSerializer);
+        return resolver;
     }
 }
