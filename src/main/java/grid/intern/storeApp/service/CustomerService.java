@@ -4,7 +4,6 @@ import grid.intern.storeApp.exceptions.customerExceptions.CustomerNotFoundExcept
 import grid.intern.storeApp.model.dto.CustomerSessionDto;
 import grid.intern.storeApp.model.entity.Customer;
 import grid.intern.storeApp.repository.CustomerRepository;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;

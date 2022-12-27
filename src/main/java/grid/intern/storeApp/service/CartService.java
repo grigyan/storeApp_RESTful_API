@@ -3,7 +3,6 @@ package grid.intern.storeApp.service;
 import grid.intern.storeApp.exceptions.cartExceptions.ItemDoesNotBelongToUserException;
 import grid.intern.storeApp.exceptions.cartExceptions.ItemNotFoundException;
 import grid.intern.storeApp.exceptions.cartExceptions.LowInStockException;
-import grid.intern.storeApp.exceptions.productExceptions.ProductNotFoundException;
 import grid.intern.storeApp.model.dto.AddToCartDto;
 import grid.intern.storeApp.model.dto.CartDto;
 import grid.intern.storeApp.model.dto.CartItemDto;
@@ -11,13 +10,10 @@ import grid.intern.storeApp.model.entity.Cart;
 import grid.intern.storeApp.model.entity.Customer;
 import grid.intern.storeApp.model.entity.Product;
 import grid.intern.storeApp.repository.CartRepository;
-import grid.intern.storeApp.repository.ProductRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CartService {
