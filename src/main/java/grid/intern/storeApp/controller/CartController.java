@@ -37,11 +37,6 @@ public class CartController {
 
         CustomerSessionDto customerSessionDto = (CustomerSessionDto) request.getSession().getAttribute("user");
         Customer customer = customerService.findById(customerSessionDto.getCustomerId());
-        int available = productService.findById(addToCartDto.getProductId()).getAvailable();
-        int toBeAdded = addToCartDto.getQuantity();
-        if (toBeAdded > available) {
-            throw new LowInStockException(available);
-        }
 
         cartService.addToCart(addToCartDto, customer);
         return new ResponseEntity<>(new ApiResponse(true, "Added to Cart"), HttpStatus.CREATED);
