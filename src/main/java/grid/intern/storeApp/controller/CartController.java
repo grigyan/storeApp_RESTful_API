@@ -44,13 +44,14 @@ public class CartController {
 
     @GetMapping("/")
     public ResponseEntity<CartDto> getCartItems(HttpServletRequest request) {
-        if (request.getSession().getAttribute("user") == null) {
+        CustomerSessionDto customerSessionDto = (CustomerSessionDto)
+                request.getSession().getAttribute("user");
+
+        if (customerSessionDto == null) {
             throw new CustomerNotLoggedInException();
         }
 
-        CustomerSessionDto customerSessionDto = (CustomerSessionDto) request.getSession().getAttribute("user");
-        Customer customer = customerService.findById(customerSessionDto.getCustomerId());
-        CartDto cartDto = cartService.listAllItems(customer);
+        CartDto cartDto = cartService.listAllItems(customerSessionDto.getCustomerId());
         return new ResponseEntity<>(cartDto, HttpStatus.OK);
     }
 

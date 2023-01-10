@@ -19,10 +19,12 @@ import java.util.List;
 public class CartService {
     private final CartRepository cartRepository;
     private final ProductService productService;
+    private final CustomerService customerService;
 
-    public CartService(CartRepository cartRepository, ProductService productService) {
+    public CartService(CartRepository cartRepository, ProductService productService, CustomerService customerService) {
         this.productService = productService;
         this.cartRepository = cartRepository;
+        this.customerService = customerService;
     }
 
     public void addToCart(AddToCartDto addToCartDto, Customer customer) {
@@ -48,7 +50,8 @@ public class CartService {
         return cartRepository.findAllByCustomerId(customerId);
     }
 
-    public CartDto listAllItems(Customer customer) {
+    public CartDto listAllItems(Integer customerId) {
+        Customer customer = customerService.findById(customerId);
         List<Cart> cartList = cartRepository.findAllByCustomerId(customer.getId());
 
         List<CartItemDto> cartItems = new ArrayList<>();
