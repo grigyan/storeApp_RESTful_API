@@ -29,7 +29,7 @@ public class CartController {
     }
 
 
-    @PostMapping("/add")
+    @PostMapping("/")
     public ResponseEntity<ApiResponse> addToCart(@RequestBody AddToCartDto addToCartDto,  HttpServletRequest request) {
         if (request.getSession().getAttribute("user") == null) {
             throw new CustomerNotLoggedInException();
@@ -54,7 +54,7 @@ public class CartController {
         return new ResponseEntity<>(cartDto, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{cartItemId}")
+    @DeleteMapping("/{cartItemId}")
     public ResponseEntity<ApiResponse> deleteCartItem(@PathVariable Integer cartItemId, HttpServletRequest request) {
         if (request.getSession().getAttribute("user") == null) {
             throw new CustomerNotLoggedInException();
@@ -67,7 +67,7 @@ public class CartController {
         return new ResponseEntity<>(new ApiResponse(true, "Item has been removed"), HttpStatus.OK);
     }
 
-    @PutMapping("/edit")
+    @PutMapping("/")
     public ResponseEntity<ApiResponse> modifyCartItem(@RequestBody ModifyCartItemDto modifyCartItemDto,
                                                       HttpServletRequest request) {
         // check if customer is logged in
