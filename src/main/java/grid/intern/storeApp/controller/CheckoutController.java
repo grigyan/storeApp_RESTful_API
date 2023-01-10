@@ -2,14 +2,12 @@ package grid.intern.storeApp.controller;
 
 import grid.intern.storeApp.exceptions.cartExceptions.LowInStockException;
 import grid.intern.storeApp.exceptions.customerExceptions.CustomerNotLoggedInException;
-import grid.intern.storeApp.model.dto.CartDto;
 import grid.intern.storeApp.model.dto.CustomerSessionDto;
 import grid.intern.storeApp.model.entity.Cart;
-import grid.intern.storeApp.model.entity.Customer;
 import grid.intern.storeApp.model.entity.Product;
 import grid.intern.storeApp.service.CartService;
 import grid.intern.storeApp.service.CustomerService;
-import grid.intern.storeApp.util.ApiResponse;
+import grid.intern.storeApp.model.responses.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

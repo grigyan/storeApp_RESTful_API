@@ -7,7 +7,7 @@ import grid.intern.storeApp.model.entity.Customer;
 import grid.intern.storeApp.service.CartService;
 import grid.intern.storeApp.service.CustomerService;
 import grid.intern.storeApp.service.ProductService;
-import grid.intern.storeApp.util.ApiResponse;
+import grid.intern.storeApp.model.responses.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
