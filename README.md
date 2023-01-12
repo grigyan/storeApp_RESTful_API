@@ -1,18 +1,19 @@
-# REST API Modelling Store Application 🛒
+# REST API Modelling Store Application 🛍️
 
-# Endpoints
-* ## Product
+# Endpoints 📍
+* ## Product ⌚️
   * GET ```/product/```
   * GET ```/product/{id}```
-* ## Customer
+* ## Customer 🧔🏻‍♂️
   * GET ```/customer/```
   * GET ```/customer/{id}```
   * POST ```/customer/signup```
   * POST ```/customer/login```
-* ## Cart
+* ## Cart 🛒
   * GET ```/cart/```
   * POST ```/cart/```
   * DELETE ```/cart/{cartItemId}```
   * PUT ```/cart/```
-* ## Checkout
+* ## Checkout 🧾
   * GET ```/checkout/```
+
