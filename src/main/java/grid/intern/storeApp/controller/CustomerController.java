@@ -1,14 +1,10 @@
 package grid.intern.storeApp.controller;
 
 import grid.intern.storeApp.exceptions.customerExceptions.CustomerExistsException;
-import grid.intern.storeApp.exceptions.customerExceptions.CustomerNotFoundException;
-import grid.intern.storeApp.model.dto.CustomerSessionDto;
 import grid.intern.storeApp.model.entity.Customer;
 import grid.intern.storeApp.repository.ProductRepository;
 import grid.intern.storeApp.service.CustomerService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/customers")
+@RequestMapping("/customer")
 public class CustomerController {
     private final CustomerService customerService;
     private final PasswordEncoder passwordEncoder;
