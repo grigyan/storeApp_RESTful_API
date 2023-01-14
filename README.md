@@ -41,3 +41,4 @@ to interact with it:
 Application is using Spring's H2-in memory database. In order to access it, just open 
 ```localhost:8080/h2-console``` in your browser with the following credentials:
 ![alt text](./images/db-credentials.png)
+
