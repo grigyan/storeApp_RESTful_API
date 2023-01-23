@@ -11,6 +11,7 @@ import grid.intern.storeApp.model.entity.Customer;
 import grid.intern.storeApp.model.entity.Product;
 import grid.intern.storeApp.repository.CartRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +70,7 @@ public class CartService {
         return cartDto;
     }
 
+    @Transactional
     public void deleteCartItem(Integer itemId, Customer customer) {
         Cart cart = cartRepository.findById(itemId)
                 .orElseThrow(() -> new ItemNotFoundException(itemId));
@@ -80,6 +82,7 @@ public class CartService {
         cartRepository.delete(cart);
     }
 
+    @Transactional
     public void modifyCart(Customer customer, Integer productId, Integer newQuantity) {
         Cart cartItem = cartRepository.findAllByCustomerIdAndProductId(customer.getId(), productId);
         cartItem.setQuantity(newQuantity);
