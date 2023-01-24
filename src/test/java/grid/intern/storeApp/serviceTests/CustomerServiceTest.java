@@ -60,8 +60,8 @@ public class CustomerServiceTest {
         when(customerRepository.existsCustomerByEmail("customer@email.com")).thenReturn(true);
         when(customerRepository.existsCustomerByEmail("falseEmail@email.com")).thenReturn(false);
 
-        boolean expectedTrue = customerService.existsCustomerByEmail("customer@email.com");
-        boolean expectedFalse = customerService.existsCustomerByEmail("falseEmail@email.com");
+        boolean expectedTrue = customerService.isCustomerExistsByEmail("customer@email.com");
+        boolean expectedFalse = customerService.isCustomerExistsByEmail("falseEmail@email.com");
 
         // then
         assertTrue(expectedTrue);
@@ -105,7 +105,7 @@ public class CustomerServiceTest {
         // when
         when(customerRepository.existsCustomerByEmail("customer@email.com")).thenReturn(true);
         when(customerRepository.getCustomerByEmail("customer@email.com")).thenReturn(customerFromDb);
-        boolean isLoggedIn = customerService.successfulLogIn(customer, new MockHttpSession());
+        boolean isLoggedIn = customerService.isLoginSuccessful(customer, new MockHttpSession());
 
         // then
         assertTrue(isLoggedIn);

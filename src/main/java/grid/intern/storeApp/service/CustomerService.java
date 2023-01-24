@@ -30,7 +30,7 @@ public class CustomerService {
                 .orElseThrow(() -> new CustomerNotFoundException(id));
     }
 
-    public boolean existsCustomerByEmail(String email) {
+    public boolean isCustomerExistsByEmail(String email) {
         return customerRepository.existsCustomerByEmail(email);
     }
 
@@ -42,8 +42,8 @@ public class CustomerService {
         return customerRepository.getCustomerByEmail(email);
     }
 
-    public boolean successfulLogIn(Customer customer, HttpSession session) {
-        if (!this.existsCustomerByEmail(customer.getEmail())) {
+    public boolean isLoginSuccessful(Customer customer, HttpSession session) {
+        if (!this.isCustomerExistsByEmail(customer.getEmail())) {
             throw new CustomerNotFoundException(customer.getEmail());
         }
 

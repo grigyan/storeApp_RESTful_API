@@ -40,7 +40,7 @@ public class CustomerController {
     // registering new user
     @PostMapping("/signup")
     public ResponseEntity<Customer> signUp(@RequestBody Customer customer) {
-        if (customerService.existsCustomerByEmail(customer.getEmail())) {
+        if (customerService.isCustomerExistsByEmail(customer.getEmail())) {
             throw new CustomerExistsException(customer.getEmail());
         }
         String hashedPassword = passwordEncoder.encode(customer.getPassword());
@@ -52,7 +52,7 @@ public class CustomerController {
     // login existing user
     @PostMapping(value = "/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody Customer customer, HttpServletRequest request) {
-        if (customerService.successfulLogIn(customer, request.getSession(true))) {
+        if (customerService.isLoginSuccessful(customer, request.getSession(true))) {
             return new ResponseEntity<>(Collections.singletonMap("sessionId", request.getSession(false).getId()),
                     HttpStatus.OK);
         } else {
