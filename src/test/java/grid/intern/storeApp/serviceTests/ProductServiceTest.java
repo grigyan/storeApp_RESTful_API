@@ -1,4 +1,4 @@
-package grid.intern.storeApp;
+package grid.intern.storeApp.serviceTests;
 
 import grid.intern.storeApp.model.entity.Product;
 import grid.intern.storeApp.repository.ProductRepository;

@@ -1,4 +1,4 @@
-package grid.intern.storeApp;
+package grid.intern.storeApp.serviceTests;
 
 import grid.intern.storeApp.model.entity.Cart;
 import grid.intern.storeApp.model.entity.Customer;

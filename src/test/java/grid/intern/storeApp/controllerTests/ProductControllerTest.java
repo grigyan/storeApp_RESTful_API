@@ -1,4 +1,4 @@
-package grid.intern.storeApp;
+package grid.intern.storeApp.controllerTests;
 
 import grid.intern.storeApp.controller.ProductController;
 import org.junit.jupiter.api.extension.ExtendWith;
