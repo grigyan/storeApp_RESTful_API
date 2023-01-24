@@ -1,6 +1,7 @@
 package grid.intern.storeApp.controller;
 
 import grid.intern.storeApp.exceptions.customerExceptions.CustomerNotLoggedInException;
+import grid.intern.storeApp.model.dto.CustomerSessionDto;
 import grid.intern.storeApp.service.CheckoutService;
 import grid.intern.storeApp.model.responses.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,7 +26,8 @@ public class CheckoutController {
         if (request.getSession().getAttribute("user") == null) {    // check if customer is logged in
             throw new CustomerNotLoggedInException();
         }
-        checkoutService.checkoutRequest(request);
+        CustomerSessionDto customerSessionDto = (CustomerSessionDto) request.getSession().getAttribute("user");
+        checkoutService.checkoutRequest(customerSessionDto);
 
         return new ResponseEntity<>(new ApiResponse(true, "Checkout completed."), HttpStatus.OK);
     }

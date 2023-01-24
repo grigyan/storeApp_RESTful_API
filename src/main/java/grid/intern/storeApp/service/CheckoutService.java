@@ -21,8 +21,7 @@ public class CheckoutService {
     }
 
     @Transactional
-    public void checkoutRequest(HttpServletRequest request) {
-        CustomerSessionDto customerSessionDto = (CustomerSessionDto) request.getSession().getAttribute("user");
+    public void checkoutRequest(CustomerSessionDto customerSessionDto) {
         Integer customerId = customerSessionDto.getCustomerId();
         List<Cart> customerItems = cartService.findAllByCustomerId(customerId);
         for (Cart item : customerItems) {
