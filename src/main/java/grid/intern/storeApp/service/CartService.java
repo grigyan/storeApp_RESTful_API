@@ -51,7 +51,7 @@ public class CartService {
         return cartRepository.findAllByCustomerId(customerId);
     }
 
-    public CartDto listAllItems(Integer customerId) {
+    public CartDto getCartInfo(Integer customerId) {
         Customer customer = customerService.findById(customerId);
         List<Cart> cartList = cartRepository.findAllByCustomerId(customer.getId());
 

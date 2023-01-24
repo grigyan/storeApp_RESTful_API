@@ -51,7 +51,7 @@ public class CartController {
             throw new CustomerNotLoggedInException();
         }
 
-        CartDto cartDto = cartService.listAllItems(customerSessionDto.getCustomerId());
+        CartDto cartDto = cartService.getCartInfo(customerSessionDto.getCustomerId());
         return new ResponseEntity<>(cartDto, HttpStatus.OK);
     }
 
