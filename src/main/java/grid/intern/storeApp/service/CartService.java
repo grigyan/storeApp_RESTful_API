@@ -3,9 +3,7 @@ package grid.intern.storeApp.service;
 import grid.intern.storeApp.exceptions.cartExceptions.ItemDoesNotBelongToUserException;
 import grid.intern.storeApp.exceptions.cartExceptions.ItemNotFoundException;
 import grid.intern.storeApp.exceptions.cartExceptions.LowInStockException;
-import grid.intern.storeApp.model.dto.AddToCartDto;
-import grid.intern.storeApp.model.dto.CartDto;
-import grid.intern.storeApp.model.dto.CartItemDto;
+import grid.intern.storeApp.model.dto.*;
 import grid.intern.storeApp.model.entity.Cart;
 import grid.intern.storeApp.model.entity.Customer;
 import grid.intern.storeApp.model.entity.Product;
@@ -83,7 +81,16 @@ public class CartService {
     }
 
     @Transactional
-    public void modifyCart(Customer customer, Integer productId, Integer newQuantity) {
+    public void modifyCartItem(ModifyCartItemDto modifyCartItemDto, CustomerSessionDto customerSessionDto) {
+        Integer productId = modifyCartItemDto.getProductId();
+        Integer newQuantity = modifyCartItemDto.getProductQuantity();
+        Integer available = productService.findById(productId).getAvailable();
+
+        if (newQuantity > available) {
+            throw new LowInStockException(available);
+        }
+
+        Customer customer = customerService.findById(customerSessionDto.getCustomerId());
         Cart cartItem = cartRepository.findAllByCustomerIdAndProductId(customer.getId(), productId);
         cartItem.setQuantity(newQuantity);
         cartRepository.save(cartItem);

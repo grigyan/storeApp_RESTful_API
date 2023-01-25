@@ -76,19 +76,8 @@ public class CartController {
             throw new CustomerNotLoggedInException();
         }
 
-        // check for available quantity
-        Integer productId = modifyCartItemDto.getProductId();
-        Integer available = productService.findById(productId).getAvailable();
-        Integer newQuantity = modifyCartItemDto.getProductQuantity();
-        if (newQuantity > available) {
-            throw new LowInStockException(available);
-        }
-
-        // get customer by customer_id
         CustomerSessionDto customerSessionDto = (CustomerSessionDto) request.getSession().getAttribute("user");
-        Customer customer = customerService.findById(customerSessionDto.getCustomerId());
-        cartService.modifyCart(customer, productId, newQuantity);
-
+        cartService.modifyCartItem(modifyCartItemDto, customerSessionDto);
 
         return new ResponseEntity<>(new ApiResponse(true, "Item was modified"), HttpStatus.OK);
     }
