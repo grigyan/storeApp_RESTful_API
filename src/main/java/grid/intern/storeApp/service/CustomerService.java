@@ -50,7 +50,7 @@ public class CustomerService {
         Customer customerFromDb = this.getCustomerByEmail(customer.getEmail());
         if (passwordEncoder.matches(customer.getPassword(), customerFromDb.getPassword())) {
             CustomerSessionDto customerSessionDto = new CustomerSessionDto(customerFromDb.getId());
-            session.setAttribute(customer.getEmail(), customerSessionDto);
+            session.setAttribute("user", customerSessionDto);
 
             return true;
         }
