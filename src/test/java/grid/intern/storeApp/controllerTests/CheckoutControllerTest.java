@@ -2,10 +2,7 @@ package grid.intern.storeApp.controllerTests;
 
 import grid.intern.storeApp.controller.CheckoutController;
 import grid.intern.storeApp.model.dto.CustomerSessionDto;
-import grid.intern.storeApp.service.CartService;
 import grid.intern.storeApp.service.CheckoutService;
-import grid.intern.storeApp.service.CustomerService;
-import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -15,12 +12,9 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
-import java.util.Map;
 
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -35,12 +29,6 @@ public class CheckoutControllerTest {
     @MockBean
     private CheckoutService checkoutService;
 
-    @MockBean
-    private CustomerService customerService;
-
-    @MockBean
-    private CartService cartService;
-
     @Test
     public void testCheckout_whenCustomerNotLoggedIn_thenStatusShouldBeUnauthorized() throws Exception {
         mockMvc.perform(get("/checkout/"))
@@ -53,10 +41,11 @@ public class CheckoutControllerTest {
         MockHttpSession session = new MockHttpSession();
         CustomerSessionDto customerSessionDto = new CustomerSessionDto(1);
         session.setAttribute("user", customerSessionDto);
-        when(cartService.findAllByCustomerId(customerSessionDto.getCustomerId()))
-                .thenReturn(new ArrayList<>());
 
-        // when and then
+        // when
+        doNothing().when(checkoutService).checkoutRequest(customerSessionDto);
+
+        // then
         mockMvc.perform(get("/checkout/")
                         .session(session)
                         .contentType(MediaType.APPLICATION_JSON))

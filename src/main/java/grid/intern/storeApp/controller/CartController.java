@@ -1,13 +1,14 @@
 package grid.intern.storeApp.controller;
 
-import grid.intern.storeApp.exceptions.cartExceptions.LowInStockException;
 import grid.intern.storeApp.exceptions.customerExceptions.CustomerNotLoggedInException;
-import grid.intern.storeApp.model.dto.*;
+import grid.intern.storeApp.model.dto.AddToCartDto;
+import grid.intern.storeApp.model.dto.CartDto;
+import grid.intern.storeApp.model.dto.CustomerSessionDto;
+import grid.intern.storeApp.model.dto.ModifyCartItemDto;
 import grid.intern.storeApp.model.entity.Customer;
+import grid.intern.storeApp.model.responses.ApiResponse;
 import grid.intern.storeApp.service.CartService;
 import grid.intern.storeApp.service.CustomerService;
-import grid.intern.storeApp.service.ProductService;
-import grid.intern.storeApp.model.responses.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +20,9 @@ public class CartController {
 
     private final CartService cartService;
     private final CustomerService customerService;
-    private final ProductService productService;
-
-    public CartController(CartService cartService, CustomerService customerService,
-                          ProductService productService) {
+    public CartController(CartService cartService, CustomerService customerService) {
         this.customerService = customerService;
         this.cartService = cartService;
-        this.productService = productService;
     }
 
 

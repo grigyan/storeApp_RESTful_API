@@ -2,7 +2,6 @@ package grid.intern.storeApp.controller;
 
 import grid.intern.storeApp.exceptions.customerExceptions.CustomerExistsException;
 import grid.intern.storeApp.model.entity.Customer;
-import grid.intern.storeApp.repository.ProductRepository;
 import grid.intern.storeApp.service.CustomerService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -21,7 +20,7 @@ public class CustomerController {
     private final CustomerService customerService;
     private final PasswordEncoder passwordEncoder;
 
-    public CustomerController(CustomerService service, ProductRepository productRepository) {
+    public CustomerController(CustomerService service) {
         this.customerService = service;
         passwordEncoder = new BCryptPasswordEncoder();
     }
