@@ -1,8 +1,5 @@
 package grid.intern.storeApp.model.dto;
 
-import grid.intern.storeApp.model.entity.Cart;
-import grid.intern.storeApp.model.entity.Product;
-
 import java.util.List;
 
 public class CartDto {  // For showing cart's products.

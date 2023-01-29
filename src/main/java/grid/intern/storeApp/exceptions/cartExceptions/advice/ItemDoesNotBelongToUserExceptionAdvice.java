@@ -1,7 +1,6 @@
 package grid.intern.storeApp.exceptions.cartExceptions.advice;
 
 import grid.intern.storeApp.exceptions.cartExceptions.ItemDoesNotBelongToUserException;
-import grid.intern.storeApp.exceptions.cartExceptions.ItemNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

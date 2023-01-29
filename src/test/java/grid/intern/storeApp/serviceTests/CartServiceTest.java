@@ -4,8 +4,6 @@ import grid.intern.storeApp.model.entity.Cart;
 import grid.intern.storeApp.model.entity.Customer;
 import grid.intern.storeApp.repository.CartRepository;
 import grid.intern.storeApp.service.CartService;
-import grid.intern.storeApp.service.CustomerService;
-import grid.intern.storeApp.service.ProductService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

@@ -1,6 +1,5 @@
 package grid.intern.storeApp.model.entity;
 
-import grid.intern.storeApp.model.dto.CartDto;
 import jakarta.persistence.*;
 
 @Entity

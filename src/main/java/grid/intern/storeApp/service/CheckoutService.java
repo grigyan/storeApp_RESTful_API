@@ -4,7 +4,6 @@ import grid.intern.storeApp.exceptions.cartExceptions.LowInStockException;
 import grid.intern.storeApp.model.dto.CustomerSessionDto;
 import grid.intern.storeApp.model.entity.Cart;
 import grid.intern.storeApp.model.entity.Product;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
