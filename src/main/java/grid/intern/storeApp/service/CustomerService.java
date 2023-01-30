@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Service
 public class CustomerService {
@@ -56,5 +57,27 @@ public class CustomerService {
         }
 
         return false;
+    }
+
+
+    public boolean isEmailValid (String email) {
+        String regex = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+        return Pattern.compile(regex)
+                .matcher(email)
+                .matches();
+    }
+
+    /*
+        Must have at least one numeric character
+        Must have at least one lowercase character
+        Must have at least one uppercase character
+        Must have at least one special symbol among @#$%
+        Password length should be between 8 and 20
+     */
+    public boolean isPasswordStrong(String password) {
+        String regex = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8,20}$";
+        return Pattern.compile(regex)
+                .matcher(password)
+                .matches();
     }
 }

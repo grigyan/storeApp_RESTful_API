@@ -1,6 +1,8 @@
 package grid.intern.storeApp.controller;
 
+import grid.intern.storeApp.exceptions.customerExceptions.CustomerEmailNotValidException;
 import grid.intern.storeApp.exceptions.customerExceptions.CustomerExistsException;
+import grid.intern.storeApp.exceptions.customerExceptions.CustomerPasswordNotStrongException;
 import grid.intern.storeApp.model.entity.Customer;
 import grid.intern.storeApp.service.CustomerService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,6 +44,15 @@ public class CustomerController {
         if (customerService.isCustomerExistsByEmail(customer.getEmail())) {
             throw new CustomerExistsException(customer.getEmail());
         }
+
+        if (!customerService.isEmailValid(customer.getEmail())) {
+            throw new CustomerEmailNotValidException(customer.getEmail());
+        }
+
+        if (!customerService.isPasswordStrong(customer.getPassword())) {
+            throw new CustomerPasswordNotStrongException(customer.getPassword());
+        }
+
         String hashedPassword = passwordEncoder.encode(customer.getPassword());
         customer.setPassword(hashedPassword);
 
