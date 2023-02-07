@@ -5,6 +5,7 @@ import grid.intern.storeApp.model.dto.CustomerSessionDto;
 import grid.intern.storeApp.model.entity.Cart;
 import grid.intern.storeApp.model.entity.Product;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class CheckoutService {
         this.cartService = cartService;
     }
 
-    @Transactional
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void checkoutRequest(CustomerSessionDto customerSessionDto) {
         Integer customerId = customerSessionDto.getCustomerId();
         List<Cart> customerItems = cartService.findAllByCustomerId(customerId);
